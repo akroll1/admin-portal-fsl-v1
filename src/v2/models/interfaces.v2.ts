@@ -1,23 +1,21 @@
 import type {
     AnalyticType,
-    DistanceType,
-    Networks,
+    CornerType,
+    FighterType,
     SeasonType,
     Status,
     UserPickType,
-    WeightClass,
-  } from "./enums";
+  } from "./enums.v2";
   import type {
-    Fight,
+    DistanceMetas,
+    FightMetas,
     Manager,
     RoundScore,
     ScorecardFinal,
     ScorecardMetas,
-    Season,
-    Show,
+    ShowMetas,
     TeamMember,
-    UIMetas,
-  } from "./types";
+  } from "./types.v2";
   
   export interface Analytic {
     id: string; // distance ID.
@@ -35,29 +33,22 @@ import type {
     cornerName: string;
     manager: Manager;
     team: TeamMember[];
-    type: DistanceType;
+    type: CornerType;
     createdAt?: string;
     updatedAt?: string;
   }
   
-  export interface Distance {
+  export interface Fight {
     id: string;
-    instance: Season | Show | Fight;
-    metas: UIMetas;
+    fighters: Fighter[];
+    instance: FightMetas;
+    metas: DistanceMetas;
     status: Status;
-    type: DistanceType;
-  }
-  
-  export interface DistanceSummary {
-    id: string;
-    distance: Distance;
-    summary: DistanceSummary[] | Fighter[];
-    type: DistanceType;
-    createdAt?: string;
   }
   
   export interface Fighter {
     id: string;
+    type: FighterType;
     firstName: string;
     home: string | null;
     lastName: string;
@@ -82,19 +73,29 @@ import type {
     createdAt?: string;
   }
   
-  export interface Leaderboard {
-    id: string;
-    board: Record<string, string | number>[];
-    type: DistanceType;
-    createdAt?: string;
-  }
-  
   export interface Scorecard {
     id: string; // sub+fightId.
     final?: ScorecardFinal | null;
     metas: ScorecardMetas;
     scores?: RoundScore[];
   }
+  
+  export interface Season {
+    id: string;
+    metas: DistanceMetas;
+    shows: Show[];
+    status: Status;
+    type: SeasonType;
+  }
+  
+  export interface Show {
+    id: string;
+    fights: Fight[];
+    instance: ShowMetas;
+    metas: DistanceMetas;
+    status: Status;
+  }
+  
   
   export interface SwingsChart {
     id: string; // fight.id
@@ -104,51 +105,21 @@ import type {
     createdAt?: string;
   }
   
-  export interface UISummary {
-    id: string;
-    description: string | null;
-    isMainEvent?: boolean;
-    isTitleFight?: boolean;
-    location?: string | null;
-    network?: Networks | null;
-    officialResult?: string | null;
-    parent: string | null;
-    promoter?: string | null;
-    rounds?: number;
-    seasonType?: SeasonType | null;
-    starts: string;
-    ends?: string | null;
-    status: Status;
-    storyline?: string | null;
-    subtitle?: string | null;
-    summary: UISummary[] | Fighter[];
-    title: string;
-    type: DistanceType;
-    typeIds: string[] | null;
-    weightclass?: WeightClass;
-    createdAt: string;
-    updatedAt?: string;
-  }
   export interface User {
-    sub?: string;
-    accessToken?: string;
-    idToken?: string;
-    isAdmin?: boolean;
-    isBetaA?: boolean;
-    refreshToken?: string;
+    sub: string;
     bio?: string | null;
-    email?: string;
+    email: string;
     fightCoins?: number;
     firstName?: string | null;
+    image?: string | null;
     isPublic?: boolean;
-    isLoggedIn?: boolean;
     lastName?: string | null;
+    location?: string | null;
     tagline?: string | null;
     username?: string;
     createdAt?: string;
     updatedAt?: string;
-    subscribe?: boolean; // For weekly fights update newsletter, on Set User Name Modal.
-}
+  }
   
   export interface UserCorner {
     id: string; // sub+seasonId.

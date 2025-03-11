@@ -9,7 +9,7 @@ export const HelmetCSP = () => {
         style-src 'self' 'unsafe-inline' *.audioeye.com;
         img-src 'self' https://www.googletagmanager.com https://assets-jpcust.jwpsrv.com http://prd.jwpltx.com https://cdn.jwplayer.com https://res.cloudinary.com https://*.audioeye.com;
         font-src 'self' data: maxcdn.bootstrapcdn.com https://fonts.gstatic.com https://*.audioeye.com;
-        connect-src 'self' *.execute-api.us-east-1.amazonaws.com wss://edge.ivschat.us-east-1.amazonaws.com http://localhost:33555 *.google.com https://videos-cloudfront-usp.jwpsrv.com https://assets-jpcust.jwpsrv.com http://ssl.p.jwpcdn.com https://cdn.jwplayer.com https://pagead2.googlesyndication.com http://localhost:19044 http://localhost:8090 *.audioeye.com;
+        connect-src 'self' *.execute-api.us-east-1.amazonaws.com wss://edge.ivschat.us-east-1.amazonaws.com http://localhost:33555 *.google.com https://videos-cloudfront-usp.jwpsrv.com https://assets-jpcust.jwpsrv.com http://ssl.p.jwpcdn.com https://cdn.jwplayer.com https://pagead2.googlesyndication.com http://localhost:19044 http://localhost:8090 http://localhost:19090 *.audioeye.com;
         media-src 'self' blob: http://ssl.p.jwpcdn.com *.jwplayer.com *.audioeye.com;
         object-src 'none';
         frame-src *.audioeye.com;
