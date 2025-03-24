@@ -4,6 +4,7 @@ import type {
     Networks,
     RoundNote,
     SeasonType,
+    Status,
     UserFeedbackType,
     WeightClass,
 } from "./enums";
@@ -48,6 +49,7 @@ export type FightProps = {
 	createdAt?: number
 	updatedAt?: number
 }
+
 export type Judge = {
     id: string;
     bio?: string | null;
@@ -77,14 +79,16 @@ export type Props = {
 };
   
 export type ResolveFightDistance = {
-    canceled?: boolean;
+    fightId: string;
     fighter1: string;
     fighter2: string;
-    fightId: string;
-    resolution: string;
-    rounds: number;
     f1Knockdowns: number;
     f2Knockdowns: number;
+    resolution: string;
+    rounds: number;
+    seasonId: string;
+    showId: string;
+    status: Status;
 };
   
 export type ResponseMessage = {

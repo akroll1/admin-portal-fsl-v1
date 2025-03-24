@@ -19,13 +19,13 @@ import {
 import { FieldGroup } from '../../../chakra'
 import { FighterType, useGlobalStore } from '../../../stores'
 
-export const FighterForm = () => {
+export const FighterFormV2 = () => {
     const { 
-        deleteFighter,
-        fetchFighterById,
+        deleteFighterV2,
+        fetchFighterByIdV2,
         selectedFighter,
         isSubmitting,
-        updateFighter,
+        updateFighterV2,
     } = useGlobalStore()
 
     const [form, setForm] = useState({
@@ -51,7 +51,7 @@ export const FighterForm = () => {
     },[selectedFighter])
 
     const searchForFighter = e => {
-        fetchFighterById(form.id)
+        fetchFighterByIdV2(form.id)
     }
 
     const handleFormChange = e => {
@@ -67,12 +67,12 @@ export const FighterForm = () => {
             dq: parseInt(form.dq),
             kos: parseInt(form.kos),
         })
-        updateFighter(form)
+        updateFighterV2(form)
     }
     
 
     const handleDeleteFighter = e => {
-        deleteFighter(form.id)
+        deleteFighterV2(form.id)
     }
 
     console.log('form: ', form)

@@ -14,9 +14,12 @@ import {
 import { NavLinkDashboard } from '../components/navbar'
 import { IoLogOutOutline } from 'react-icons/io5'
 import { UserInfo } from '../chakra'
-import { DistancesForm } from '../v2/forms'
 import { useParams } from 'react-router-dom'
 import { useGlobalStore } from '../stores'
+import { DistancesFormV2 } from '../v2/forms/distances-form'
+import { FighterFormV2 } from '../v2/forms/fighter-form'
+import { FightResolutionFormV2 } from '../v2/forms/fight-resolution-form'
+import { FightPropsFormV2 } from '../v2/forms/fight-props-form'
 
 export const V2Forms = () => {
   const { type } = useParams();
@@ -25,8 +28,6 @@ export const V2Forms = () => {
     signOutUser,
     user, 
   } = useGlobalStore()
-
-  // console.log('user', user)
   
   const [active, setActive] = useState(type.toUpperCase());
   const [form, setForm] = useState(type.toUpperCase())
@@ -37,8 +38,11 @@ export const V2Forms = () => {
   };
 
   const formLinks = [
-    // { value: "BROADCAST", label:"Broadcast Form", type: 'Broadcast', icon: FaEdit, link: '/forms/broadcast' },
-    { value: "FIGHT_FORM", label:"Fight Form", icon: FaEdit, link: '/v2/forms/fight' },
+    { value: "FIGHTERS_FORM", label:"Fighters ", type: 'Fighters', icon: FaEdit, link: '/v2/forms/fighters' },
+    { value: "FIGHT_FORM", label:"Distances Form", icon: FaEdit, link: '/v2/forms/fight' },
+    { value: "FIGHT_PROPS", label:"Fight Props Form", icon: FaEdit, link: '/v2/forms/props' },
+    { value: "RESOLUTION_FORM", label:"Resolution Form", type: 'Resolution', icon: FaEdit, link: '/v2/forms/resolutions' },
+
   ];
 
   const userFormLinks = () => {
@@ -124,7 +128,10 @@ export const V2Forms = () => {
         borderRadius="md" 
         mt={0}
       >
-        { form === 'FIGHT_FORM' && <DistancesForm /> }
+        {form === 'FIGHTERS_FORM' && <FighterFormV2 /> }
+        {form === 'FIGHT_FORM' && <DistancesFormV2 /> }
+        {form === 'FIGHT_PROPS' && <FightPropsFormV2 /> }
+        {form === 'RESOLUTION_FORM' && <FightResolutionFormV2 /> }
       </Box>
     </Flex>
   )

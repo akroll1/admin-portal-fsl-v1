@@ -13,6 +13,7 @@ import type {
     RoundScore,
     ScorecardFinal,
     ScorecardMetas,
+    SeasonMetas,
     ShowMetas,
     TeamMember,
   } from "./types.v2";
@@ -38,7 +39,7 @@ import type {
     updatedAt?: string;
   }
   
-  export interface Fight {
+  export interface FightV2 {
     id: string;
     fighters: Fighter[];
     instance: FightMetas;
@@ -80,17 +81,17 @@ import type {
     scores?: RoundScore[];
   }
   
-  export interface Season {
+  export interface SeasonV2 {
     id: string;
     metas: DistanceMetas;
-    shows: Show[];
+    shows: ShowV2[];
     status: Status;
-    type: SeasonType;
+    instance: SeasonMetas;
   }
   
-  export interface Show {
+  export interface ShowV2 {
     id: string;
-    fights: Fight[];
+    fights: FightV2[];
     instance: ShowMetas;
     metas: DistanceMetas;
     status: Status;

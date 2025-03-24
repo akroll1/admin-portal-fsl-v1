@@ -20,35 +20,35 @@ export const DistanceMetasPartial = ({
                     <FormLabel htmlFor="parent">Parent ID</FormLabel>
                     <Input 
                         onChange={e => setMetas({ ...metas, parent: e.currentTarget.value })}
-                        value={metas.parent}
+                        value={metas?.parent || ""}
                     />
                 </FormControl>
                 <FormControl id="title">
                     <FormLabel htmlFor="title">Title</FormLabel>
                     <Input 
                         onChange={e => setMetas({ ...metas, title: e.currentTarget.value })}
-                        value={metas.title}
+                        value={metas?.title || ""}
                     />
                 </FormControl>
                 <FormControl id="subtitle">
                     <FormLabel htmlFor="subtitle">Subtitle</FormLabel>
                     <Input  
-                        value={metas.subtitle} 
                         onChange={e => setMetas({ ...metas, subtitle: e.currentTarget.value })} 
+                        value={metas?.subtitle || ""} 
                     />
                 </FormControl>
                 <FormControl id="description">
                     <FormLabel htmlFor="description">Description</FormLabel>
                         <Textarea 
-                            value={metas.description} 
                             onChange={e => setMetas({ ...metas, description: e.currentTarget.value })}
+                            value={metas?.description || ""} 
                             rows={4} 
                         />
                 </FormControl>
                 <FormControl id="storyline">
                     <FormLabel htmlFor="storyline">Storyline</FormLabel>
                         <Textarea 
-                            value={metas.storyline} 
+                            value={metas?.storyline || ""} 
                             onChange={e => setMetas({ ...metas, storyline: e.currentTarget.value })}
                             rows={4} 
                         />
@@ -72,10 +72,10 @@ export const DistanceMetasPartial = ({
                         dateFormat="Pp"     
                         timeFormat="p"    
                         showTimeSelect                           
-                        selected={metas.ends}
+                        selected={new Date(metas.ends)}
                         style={{background: '#FFF', color: '#333 !important'}}
                         onChange={time => setMetas({ ...metas, ends: time })}
-                    />
+                        />
                 </FormControl>
                 <FormControl required id="typeId">
                     <FormLabel htmlFor="typeId">Type IDs</FormLabel>

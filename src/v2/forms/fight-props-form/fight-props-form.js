@@ -14,11 +14,11 @@ import {
 import { FieldGroup } from '../../../chakra'
 import { useGlobalStore } from '../../../stores';
 
-export const DistanceMetasForm = () => {
+export const FightPropsFormV2 = () => {
     const {
-        fetchDistanceMetas,
-        updateDistanceMetas,
-        distanceMetas,
+        fetchFightPropsByIdV2,
+        props,
+        updateFightPropsV2,
     } = useGlobalStore()
 
     const [f1, setF1] = useState(null)
@@ -29,10 +29,9 @@ export const DistanceMetasForm = () => {
     const [form, setForm] = useState({})
 
     useEffect(() => {
-
-        if(distanceMetas?.id){
-            setFightId(distanceMetas.id)
-            const { props } = distanceMetas
+        if(props?.message?.includes("No props found for this fight.")) return alert("No props found for this fight.")
+        if(props?.id){
+            setFightId(props.id)
             if(!props?.moneyline) {
                 alert('No moneyline found')
                 return
@@ -42,15 +41,12 @@ export const DistanceMetasForm = () => {
             setF2Moneyline(props.moneyline[f2])
             setF1(f1)
             setF2(f2)
-            setForm({ 
-                ...distanceMetas, 
-            })
         }
-    },[distanceMetas])
+    },[props])
 
-    const handleFetchDistanceMetas = () => {
-        if(form?.id?.length !== 36) return alert("FightId must be 36 characters")
-        fetchDistanceMetas(form.id)
+    const handleFetchFightProps = () => {
+        if(!fightId || fightId.length !== 21) return alert("FightId must be 21 characters")
+        fetchFightPropsByIdV2(fightId)
     }
 
     const handleSubmit = e => {
@@ -58,17 +54,18 @@ export const DistanceMetasForm = () => {
         if(f1?.length !== 36 || f2?.length !== 36) return alert("FightId and fighters must be 36 characters")
         if(!f1Moneyline || !f2Moneyline) return alert("Moneyline must be a number")
 
+        if(!fightId) return alert("No fight ID!")
+        if(!f1 || !f2) return alert("No fighters!")
+        if(!f1Moneyline || !f2Moneyline) return alert("No moneyline!")
         const updateObj = {
-            id: fightId || form.id,
-            props: {
-                moneyline: {
-                    [f1]: f1Moneyline,
-                    [f2]: f2Moneyline,
-                }
-            },
+            id: fightId,
+            moneyline: {
+                [f1]: f1Moneyline,
+                [f2]: f2Moneyline,
+            }
         }
         console.log('updateObj: ', updateObj)
-        updateDistanceMetas(updateObj)
+        updateFightPropsV2(updateObj)
     }
 
     return (
@@ -81,15 +78,15 @@ export const DistanceMetasForm = () => {
             <form id="distance_metas_form" onSubmit={(e) => {e.preventDefault()}}>
                 <Stack spacing="4" divider={<StackDivider />}>
                     <Heading size="lg" as="h1" paddingBottom="4">
-                        Distance Metas Form
+                        Fight Props Form
                     </Heading>
-                    <FieldGroup title="Search Distance Metas">
+                    <FieldGroup title="Search Fight Props">
                         <VStack width="full" spacing="6">
                             <FormControl id="id">
                                 <FormLabel htmlFor="id">Fight ID</FormLabel>
                                 <Input 
-                                    value={form.id} 
-                                    onChange={e => setForm({ ...form, id: e.currentTarget.value })} 
+                                    value={fightId} 
+                                    onChange={e => setFightId(e.currentTarget.value)} 
                                     type="text" 
                                 />
                             </FormControl>
@@ -97,9 +94,8 @@ export const DistanceMetasForm = () => {
                                 <Button 
                                     disabled={!form.id}  
                                     minW="33%" 
-                                    // isLoading={isSubmitting} 
                                     loadingText="Searching..." 
-                                    onClick={handleFetchDistanceMetas} 
+                                    onClick={handleFetchFightProps} 
                                     type="button" 
                                     colorScheme="solid"
                                 >
@@ -108,7 +104,7 @@ export const DistanceMetasForm = () => {
                             </HStack>
                         </VStack>
                     </FieldGroup>
-                    <FieldGroup title="Distance Metas">
+                    <FieldGroup title="Moneyline">
                         <VStack width="full" spacing="6">
 
                             <FormControl id={f1 || null}>

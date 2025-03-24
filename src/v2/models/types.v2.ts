@@ -1,4 +1,4 @@
-import type { Networks, RoundNote, Status, WeightClass } from "./enums.v2";
+import type { Networks, RoundNote, SeasonType, Status, WeightClass } from "./enums.v2";
 
 export type AcceptCornerInvite = {
   id: string; // inviteId, used to delete invite.
@@ -77,8 +77,13 @@ export type ScorecardMetas = {
   updatedAt?: string;
 };
 
+export type SeasonMetas = {
+  type: SeasonType;
+}
+
 export type ShowMetas = {
   location: string | null;
+  link?: string | null;
   network: Networks | null;
   promoter: string | null;
 };

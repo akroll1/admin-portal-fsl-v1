@@ -16,101 +16,58 @@ import {
 } from '@chakra-ui/react'
 import { FieldGroup } from '../../../chakra'
 import { officialResultOptions, Status, useGlobalStore } from '../../../stores'
-import Datepicker from 'react-datepicker'
 
-export const FightResolutionForm = () => {
-    const [isCanceledSubmitting, setIsCanceledSubmitting] = useState(false)
-    const [searchId, setSearchId] = useState('')    
+export const FightResolutionFormV2 = () => {
+
+    const { fight } = useGlobalStore()
+
+    const [distanceId, setDistanceId] = useState('')
+    const [form, setForm] = useState({})
+    const [status, setStatus] = useState('')
     const [knockdowns, setKnockdowns] = useState({})
     const [officialResultForm, setOfficialResultForm] = useState({
         winnerId: '',
         resolution: '',
     })
-    const [form, setForm] = useState({
-        id: '',
-        description: '',
-        parent: '',
-        storyline: '',
-        subtitle: '',
-        syncs: '',
-        title: '',
-        starts: new Date(),
-        ends: new Date(),
-        createdAt: '',
-        updatedAt: '',
-        isMainEvent: false, 
-        isTitleFight: false, 
-        officialResult: '', 
-        rounds: 3,  
-        location: '',
-        network: '',
-        promoter: '',
-        seasonType: '',
-        status: 'PENDING',
-        type: '',
-        typeIds: [],
-        weightclass: '',
-        winnerId: '', 
-    });
-
+    const [searchId, setSearchId] = useState('')
+    const [seasonId, setSeasonId] = useState('')
     const { 
-        fetchDistanceById,
-        isSubmitting,
-        selectedDistance,
-        updateFightResolution,
+        fetchFightByIdV2,
+        updateFightResolutionV2,
     } = useGlobalStore()
 
     useEffect(() => {
-        if(selectedDistance?.id){
-            const { id, instance, metas, type } = selectedDistance
-            if(type === 'SHOW'){
-                console.log('SHOW ID: ', id)
-                console.log('FIGHT ID: ', metas?.typeIds?.toString())
-                alert(`SHOW: ${metas.title} \n\nFIGHT ID: \n${metas?.typeIds?.toString()}`)
-                return
-            }
+        if(fight?.id){
+            setDistanceId(fight.id)
+            setStatus(fight.status)
             setForm({
-                ...form,
-                id: id ? id : '',
-                description: metas.description ? metas.description : '',
-                parent: metas.parent ? metas.parent : '',
-                storyline: metas.storyline ? metas.storyline : '',
-                subtitle: metas.subtitle ? metas.subtitle : '',
-                syncs: metas.syncs ? metas.syncs : '',
-                title: metas.title ? metas.title : '',
-                starts: metas.starts ? new Date(metas.starts) : new Date(),
-                ends: metas.ends ? new Date(metas.ends) : new Date(),
-                createdAt: metas.createdAt ? metas.createdAt : '',
-                updatedAt: metas.updatedAt ? metas.updatedAt : '',
-                // FIGHT
-                isMainEvent: instance.isMainEvent ? true : false, 
-                isTitleFight: instance.isTitleFight ? true : false, 
-                officialResult: instance.officialResult || '',
-                rounds: instance.rounds ? instance.rounds : 3,  
-                weightclass: instance.weightclass ? instance.weightclass : '',  
-                // SHOW
-                location: instance.location ? instance.location : '',
-                network: instance.network ? instance.network : 'NONE',
-                promoter: instance.promoter ? instance.promoter : '',
-                status: instance.status ? instance.status : "PENDING",
-                type,
-                seasonType: instance.seasonType ? instance.seasonType : '',
-                typeIds: metas.typeIds ? metas.typeIds : [],
-            })
+                id: fight.id,
+                isMainEvent: fight?.instance?.isMainEvent || false,
+                isTitleFight: fight?.instance?.isTitleFight || false,
+                officialResult: fight?.instance?.officialResult || null,
+                rounds: fight?.instance?.rounds,
+                weightclass: fight?.instance?.weightclass,
+                description: fight?.metas?.description || null,
+                parent: fight?.metas?.parent || null,
+                storyline: fight?.metas?.storyline || null,
+                subtitle: fight?.metas?.subtitle || null,
+                title: fight?.metas?.title,
+                typeIds: fight?.metas?.typeIds || [],
+                starts: fight?.metas?.starts,
+                ends: fight?.metas?.ends || null,
+            });
         }
-    },[selectedDistance])
+    },[fight])
 
     const handleSearchForDistance = () => {
-        fetchDistanceById(searchId)
+        fetchFightByIdV2(searchId)
     }
 
     const handleFightWasCanceled = async () => {
-        setIsCanceledSubmitting(true)
-        await updateFightResolution({ 
-            fightId: form.id,
+        await updateFightResolutionV2({ 
+            fightId: fight.id,
             status: Status.CANCELED,
         })
-        setIsCanceledSubmitting(false)
     }
 
     const handleSubmitResolution = () => {
@@ -128,14 +85,19 @@ export const FightResolutionForm = () => {
             fightId: form.id,
             fighter1,
             fighter2,
-            f1Knockdowns,
-            f2Knockdowns,
+            f1Knockdowns: parseInt(f1Knockdowns),
+            f2Knockdowns: parseInt(f2Knockdowns),
             resolution,
             rounds: form?.rounds,
-            status: Status.COMPLETE,
+            seasonId,
+            showId: form?.parent,
+            status,
         }
         console.log('RESOLUTION: ', resolutionObj)
-        updateFightResolution(resolutionObj)
+        if(!resolutionObj?.seasonId) return alert('Missing season ID!')
+        if(!resolutionObj?.showId) return alert('Missing show ID!')
+        if(!resolutionObj?.status) return alert('Missing status!')
+        updateFightResolutionV2(resolutionObj)
     }
     const handleFormChange = e => {
         const { id, value } = e.currentTarget;
@@ -152,20 +114,16 @@ export const FightResolutionForm = () => {
         setOfficialResultForm({ ...officialResultForm, [id]: value });
     }
 
-    // console.log('form: ', form)
-    // console.log('officialResultForm: ', officialResultForm)
-    // console.log('knockdowns: ', knockdowns)
-
     return (
         <Box px={{base: '4', md: '10'}} py="16" maxWidth="3xl" mx="auto">
             <Heading size="lg" as="h1" paddingBottom="4">
                 Resolutions Form
             </Heading>
-            <FieldGroup title="Search Distances">
+            <FieldGroup title="Search Fights">
                 <VStack width="full" spacing="6">
                     <FormControl id="searchId">
-                        <FormLabel htmlFor="searchId">Distance ID</FormLabel>
-                        <Input value={searchId.trim()} onChange={e => setSearchId(e.currentTarget.value)} type="text" maxLength={36} minLength={36} />
+                        <FormLabel htmlFor="searchId">Fight ID</FormLabel>
+                        <Input value={searchId.trim()} onChange={e => setSearchId(e.currentTarget.value)} type="text" />
                     </FormControl>
                     <HStack justifyContent="center" width="full">
                         <Button 
@@ -184,7 +142,7 @@ export const FightResolutionForm = () => {
             </FieldGroup>
             <form id="settings-form" onSubmit={(e) => {e.preventDefault()}}>
                 <Stack spacing="4" divider={<StackDivider />}>
-                    { form?.id && <>
+                    {form?.id && <>
                         <FieldGroup title="Metas">
                             <VStack width="full" spacing="6">
 
@@ -207,18 +165,6 @@ export const FightResolutionForm = () => {
                                 <FormControl id="storyline">
                                     <FormLabel htmlFor="storyline">Storyline</FormLabel>
                                         <Textarea value={form.storyline} onChange={handleFormChange} rows={3} />
-                                </FormControl>
-                                <FormControl>
-                                    <FormLabel htmlFor="starts">Starts</FormLabel>
-                                    <Datepicker 
-                                        id="starts"
-                                        dateFormat="Pp"     
-                                        timeFormat="p"    
-                                        showTimeSelect                           
-                                        selected={form.starts}
-                                        style={{background: '#FFF', color: '#333 !important'}}
-                                        // onChange={time => setForm({ ...form, starts: time })}
-                                    />
                                 </FormControl>
                             </VStack>
                         </FieldGroup>
@@ -269,6 +215,18 @@ export const FightResolutionForm = () => {
                                     </Select>
                                 </FormControl>
 
+                                <FormControl id="status">
+                                    <FormLabel htmlFor="status">Fight Status</FormLabel>
+                                    <Select onChange={e => setStatus(e.currentTarget.value)}>
+                                        {Object.keys(Status).map( status => <option key={status} value={status}>{status}</option>)}
+                                    </Select>                            
+                                </FormControl>
+
+                                <FormControl id="seasonId">
+                                    <FormLabel htmlFor="seasonId">Season ID</FormLabel>
+                                    <Input value={seasonId} onChange={e => setSeasonId(e.currentTarget.value)} type="text" />                       
+                                </FormControl>
+
                             </VStack>
                         </FieldGroup>
                         <FieldGroup mt="8">
@@ -279,7 +237,6 @@ export const FightResolutionForm = () => {
                                     onClick={handleSubmitResolution} 
                                     type="button" 
                                     colorScheme="solid"
-                                    isLoading={isSubmitting}
                                     loadingText="Submitting..."
                                 >
                                    Resolve Fight
@@ -290,7 +247,6 @@ export const FightResolutionForm = () => {
                                     onClick={handleFightWasCanceled} 
                                     type="button" 
                                     colorScheme="solid"
-                                    isLoading={isCanceledSubmitting}
                                     loadingText="Canceling Fight..."
                                 >
                                     Fight Canceled
