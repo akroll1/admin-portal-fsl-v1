@@ -17,7 +17,7 @@ import {
     VStack 
 } from '@chakra-ui/react'
 import { FieldGroup } from '../../../chakra'
-import { Status } from '../../models'
+import { SeasonType, Status } from '../../models'
 import { DistanceType, useGlobalStore } from '../../../stores'
 import { initialFightState, initialShowState, initialMetasState } from './helpers'
 import { DistanceMetasPartial, FightPartial, SeasonPartial, ShowPartial } from '../partials'
@@ -158,7 +158,7 @@ export const DistancesFormV2 = () => {
         const getInstance = () => {
             if(distanceType === DistanceType.FIGHT) return fightData;
             if(distanceType === DistanceType.SHOW) return showData;
-            if(distanceType === DistanceType.SEASON) return { type: seasonType }
+            if(distanceType === DistanceType.SEASON) return { type: seasonType || SeasonType.MONTH }
         }
         const instance = getInstance();
         const updateObj = {
@@ -173,7 +173,7 @@ export const DistancesFormV2 = () => {
         if(distanceType === DistanceType.SHOW) return updateShowV2(updateObj)
         if(distanceType === DistanceType.SEASON) return updateSeasonV2(updateObj)
     };
-    console.log('status: ', status)
+
     return (
         <Box px={{base: '4', md: '10'}} py="16" maxWidth="3xl" mx="auto">
             <FieldGroup title="Distance Type">

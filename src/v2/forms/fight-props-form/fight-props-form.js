@@ -51,7 +51,7 @@ export const FightPropsFormV2 = () => {
 
     const handleSubmit = e => {
         e.preventDefault()
-        if(f1?.length !== 36 || f2?.length !== 36) return alert("FightId and fighters must be 36 characters")
+        if(f1?.length !== 21 || f2?.length !== 21) return alert("FightId and fighters must be 21 characters")
         if(!f1Moneyline || !f2Moneyline) return alert("Moneyline must be a number")
 
         if(!fightId) return alert("No fight ID!")

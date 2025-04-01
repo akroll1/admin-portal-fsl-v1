@@ -1,3 +1,4 @@
+import { FightProps } from "../../stores";
 import type {
     AnalyticType,
     CornerType,
@@ -44,6 +45,7 @@ import type {
     fighters: Fighter[];
     instance: FightMetas;
     metas: DistanceMetas;
+    props?: FightProps | null;
     status: Status;
   }
   
