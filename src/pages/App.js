@@ -18,6 +18,8 @@ import { NotFound } from '../components/content'
 import { LearnMore } from '../components/content/learn-more'
 import { HomePage } from './home'
 
+import { V2Forms } from './v2-forms'
+
 const App = () => {
 
   const { user } = useGlobalStore()
@@ -57,6 +59,7 @@ const AuthedApp = () => {
       <Route path="/" element={<AuthLayout />}>
         <Route path="/dashboards/:type?" element={<Dashboards />} />
         <Route path="/forms/:type?" element={<Forms />} />
+        <Route path="/v2/forms/:type?" element={<V2Forms />} />
         
         <Route path="/" children={sharedRoutes} element={<SharedOutlet />} />
       </Route>

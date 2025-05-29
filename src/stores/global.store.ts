@@ -3,11 +3,13 @@ import { persist, createJSONStorage } from "zustand/middleware"
 import { adminStoreSlice, AdminStoreState } from "./admin-store"
 import { authStoreSlice, AuthStoreState } from "./auth-store"
 import { dashboardStoreSlice, DashboardsStoreState } from "./dashboards-store"
+import { v2StoreSlice, V2StoreState } from "./v2.store"
 
 export type GlobalStoreState = 
     & AuthStoreState 
     & AdminStoreState
     & DashboardsStoreState
+    & V2StoreState
 
 export const useGlobalStore = create<GlobalStoreState>()(
     persist(
@@ -15,6 +17,7 @@ export const useGlobalStore = create<GlobalStoreState>()(
             ...adminStoreSlice(set, get, api),
             ...authStoreSlice(set, get, api),
             ...dashboardStoreSlice(set, get, api),
+            ...v2StoreSlice(set, get, api),
         }),
         // reset: () => set( state => initialScorecardsStoreState)
         {

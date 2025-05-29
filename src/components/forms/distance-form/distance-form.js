@@ -21,6 +21,7 @@ import {
 } from '@chakra-ui/react'
 import { FieldGroup } from '../../../chakra'
 import Datepicker from 'react-datepicker'
+import "react-datepicker/dist/react-datepicker.css";
 import {
     DistanceType,
     Networks,
@@ -95,7 +96,7 @@ export const DistanceForm = () => {
                 network: instance.network ? instance.network : 'NONE',
                 promoter: instance.promoter ? instance.promoter : '',
                 status: instance.status ? instance.status : "PENDING",
-                type,
+                type: type || DistanceType.FIGHT,
                 seasonType: instance.seasonType ? instance.seasonType : '',
                 typeId: '',
                 typeIds: metas.typeIds ? metas.typeIds : [],
@@ -130,7 +131,7 @@ export const DistanceForm = () => {
     const handleUpdateDistance = () => {
         const distance = {
             id: form.id ? form.id : null, 
-            status: form.status,
+            status: form.status || Status.PENDING,
             type: form.type,
         }
         const metas = {
@@ -284,7 +285,7 @@ export const DistanceForm = () => {
                                     <Textarea value={form.storyline} onChange={handleFormChange} rows={3} />
                             </FormControl>
                             <FormControl>
-                                <FormLabel htmlFor="starts">Starts</FormLabel>
+                                <FormLabel w="100%" htmlFor="starts">Starts</FormLabel>
                                 <Datepicker 
                                     id="starts"
                                     dateFormat="Pp"     
