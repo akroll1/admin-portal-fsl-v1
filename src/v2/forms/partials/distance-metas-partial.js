@@ -23,6 +23,7 @@ export const DistanceMetasPartial = ({
                         value={metas?.parent || ""}
                     />
                 </FormControl>
+                
                 <FormControl id="title">
                     <FormLabel htmlFor="title">Title</FormLabel>
                     <Input 

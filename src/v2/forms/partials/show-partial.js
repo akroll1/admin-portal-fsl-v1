@@ -1,8 +1,10 @@
 import { FieldGroup } from "../../../chakra"
-import { FormControl, FormLabel, Input, Select, VStack } from "@chakra-ui/react"
+import { Checkbox, FormControl, FormLabel, Input, Select, VStack } from "@chakra-ui/react"
 import { Networks } from "../../models"
 
 export const ShowPartial = ({
+    isFeatured,
+    setIsFeatured,
     showData,
     setShowData,
 }) => {
@@ -12,6 +14,15 @@ export const ShowPartial = ({
             <VStack width="full" spacing="6">
                 <FormControl>
 
+                    <FormControl id="type" mb="4" mt="2">
+                        <Checkbox 
+                            id="isFeatured" 
+                            isChecked={isFeatured} 
+                            onChange={() => setIsFeatured(!isFeatured)}
+                        >
+                            Is Featured
+                        </Checkbox>  
+                    </FormControl>
                     <FormControl id="location">
                         <FormLabel htmlFor="location">Location</FormLabel>
                         <Input value={showData.location} onChange={e => setShowData({ ...showData, [e.currentTarget.id]: e.currentTarget.value })} type="text" maxLength={255} />

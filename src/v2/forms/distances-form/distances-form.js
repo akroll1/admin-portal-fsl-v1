@@ -47,6 +47,7 @@ export const DistancesFormV2 = () => {
     // typeId is for metas.typeIds.
     const [typeId, setTypeId] = useState('')
 
+    const [isFeatured, setIsFeatured] = useState(false)
     const [fightData, setFightData] = useState(initialFightState)
     const [showData, setShowData] = useState(initialShowState)
     const [metas, setMetas] = useState(initialMetasState);
@@ -60,7 +61,7 @@ export const DistancesFormV2 = () => {
                 isMainEvent: fight?.instance?.isMainEvent || false,
                 isTitleFight: fight?.instance?.isTitleFight || false,
                 officialResult: fight?.instance?.officialResult || null,
-                rounds: fight?.instance?.rounds,
+                rounds: Number(fight?.instance?.rounds),
                 weightclass: fight?.instance?.weightclass,
             })
             setMetas({
@@ -76,6 +77,7 @@ export const DistancesFormV2 = () => {
         }
         if(distanceType === DistanceType.SHOW && show?.id){
             setDistanceId(show.id)
+            setIsFeatured(show?.isFeatured || false)
             setStatus(show.status || Status.PENDING)
             setShowData({
                 location: show?.instance?.location || '',
@@ -170,7 +172,7 @@ export const DistancesFormV2 = () => {
         if(distanceType === DistanceType.FIGHT && (metas.typeIds.length !== 2)) return alert("Please check typeIds!")
         if((distanceType === DistanceType.SHOW || distanceType === DistanceType.SEASON) && !metas.typeIds.length) return alert("Please add typeIds!")
         if(distanceType === DistanceType.FIGHT) return updateFightV2(updateObj)
-        if(distanceType === DistanceType.SHOW) return updateShowV2(updateObj)
+        if(distanceType === DistanceType.SHOW) return updateShowV2({ ...updateObj, isFeatured })
         if(distanceType === DistanceType.SEASON) return updateSeasonV2(updateObj)
     };
 
@@ -233,6 +235,8 @@ export const DistancesFormV2 = () => {
                     metas={metas}
                     handleAddIds={handleAddIds}
                     handleRemoveId={handleRemoveId}
+                    isFeatured={isFeatured}
+                    setIsFeatured={setIsFeatured}
                     setMetas={setMetas}
                     setTypeId={setTypeId}
                     typeId={typeId}
@@ -240,7 +244,7 @@ export const DistancesFormV2 = () => {
                 
                 {distanceType === DistanceType.FIGHT && <FightPartial fightData={fightData} setFightData={setFightData} />}
                 
-                {distanceType === DistanceType.SHOW && <ShowPartial showData={showData} setShowData={setShowData} />}
+                {distanceType === DistanceType.SHOW && <ShowPartial isFeatured={isFeatured} setIsFeatured={setIsFeatured} showData={showData} setShowData={setShowData} />}
 
                 {distanceType === DistanceType.SEASON && <SeasonPartial seasonType={seasonType} setSeasonType={setSeasonType} />}
                 

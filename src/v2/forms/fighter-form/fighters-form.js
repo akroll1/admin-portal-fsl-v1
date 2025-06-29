@@ -61,6 +61,13 @@ export const FighterFormV2 = () => {
 
     const handleUpdateFighter = () => {
         Object.assign(form, {
+            lastName: form.lastName?.toLowerCase(),
+            firstName: form.firstName?.toLowerCase(),
+            ringname: form.ringname?.toLowerCase(),
+            type: form.type || FighterType.BOXER,
+            profileImg: form.profileImg || null,
+            socials: form.socials || null,
+            home: form.home || null,
             wins: parseInt(form.wins),
             losses: parseInt(form.losses),
             draws: parseInt(form.draws),
